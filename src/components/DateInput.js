@@ -6,7 +6,7 @@ import "./DateInput.css";
 const FormContainer = styled.div`
   background-color: white;
   width: 45%;
-  margin-top: 600px;
+  margin-top: 40%;
   opacity: 0.9;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
