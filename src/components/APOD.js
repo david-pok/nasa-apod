@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 
 import "./APOD.css";
+import "./DateInput.css";
 import NasaInfo from "./NasaInfo";
 import DateInput from "./DateInput";
 import Moment from "react-moment";
@@ -15,7 +16,6 @@ const ApodContainer = styled.div`
   background-repeat: no-repeat;
   background-position: top center;
   overflow: hidden;
-  
 `;
 
 const NoBGmsg = styled.h3`
@@ -23,9 +23,19 @@ const NoBGmsg = styled.h3`
   letter-spacing: 2px;
 `;
 
-const APOD = () => {
+const NoBGForm = styled.div`
+  background-color: white;
+  width: 45%;
+  margin: auto;
+`;
 
-  const moment = require('moment');
+const NoBGPtag = styled.p`
+  font-family: "Orbitron", sans-serif;
+  letter-spacing: 2px;
+`;
+
+const APOD = () => {
+  const moment = require("moment");
 
   const [picURL, setPicURL] = useState();
   const [nasaInfo, setNasaInfo] = useState([]);
@@ -33,7 +43,9 @@ const APOD = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api.nasa.gov/planetary/apod?date=${dateInput}&api_key=${NASA_KEY}`)
+      .get(
+        `https://api.nasa.gov/planetary/apod?date=${dateInput}&api_key=${NASA_KEY}`
+      )
       .then(response => {
         // console.log("nasa response", response.data);
         setPicURL(response.data.hdurl);
@@ -59,8 +71,8 @@ const APOD = () => {
     e.preventDefault();
     // console.log(e.target);
     let dateFromInput = e.target[0].value;
-    if (!moment(dateFromInput,'YYYY-MM-DD').isValid()) {
-      alert('Please enter a correct date/format.');
+    if (!moment(dateFromInput, "YYYY-MM-DD").isValid()) {
+      alert("Please enter a correct date/format.");
     } else {
       setDateInput(dateFromInput);
     }
@@ -70,7 +82,22 @@ const APOD = () => {
   if (!nasaInfo.media_type) return <NoBGmsg>Loading...</NoBGmsg>;
 
   if (nasaInfo.media_type !== "image")
-    return <NoBGmsg>Sorry, no photo for this day.</NoBGmsg>;
+    return (
+      <>
+        <NoBGmsg>Sorry, no photo for this day.</NoBGmsg>
+        <NoBGForm>
+          <form onSubmit={changeDate}>
+            <NoBGPtag>
+              Input a date for a different photo of the day
+              <br />
+              (YYYY-MM-DD):
+            </NoBGPtag>
+            <input className="input-section" />
+            <input type="submit" className="submit-btn" />
+          </form>
+        </NoBGForm>
+      </>
+    );
 
   return (
     <ApodContainer style={{ backgroundImage: `url(${picURL})` }}>
